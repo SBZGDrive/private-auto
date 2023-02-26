@@ -8,7 +8,7 @@ import time
 import os
 
 
-@don.on_message(filters.private & filters.command("start"))
+@don.on_message(filters.private & filters.command("shivam"))
 async def forward(bot: don , m: Message):
     msg = await bot.ask(m.from_user.id, "**Forward any message from the Target channel\nBot should be admin at both the Channels**")
     t_chat = msg.forward_from_chat.id
