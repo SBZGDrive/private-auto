@@ -1,16 +1,14 @@
 from pyrogram import filters
-from pyrogram import Client as GreyMatter
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram import Client as don
+from pyrogram.types import Message
 from main import LOGGER, prefixes, AUTH_USERS
 from config import Config
+import asyncio 
+import time
 import os
-import sys
 
 
-@GreyMatter.on_message(
-    filters.chat(AUTH_USERS) & filters.private &
-    filters.incoming & filters.command("start", prefixes=prefixes)
-)
+@don.on_message(filters.private & filters.command("start"))
 async def forward(bot: don , m: Message):
     msg = await bot.ask(m.from_user.id, "**Forward any message from the Target channel\nBot should be admin at both the Channels**")
     t_chat = msg.forward_from_chat.id
