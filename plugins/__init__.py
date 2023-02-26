@@ -10,49 +10,32 @@ import sys
 @GreyMatter.on_message(
     filters.chat(AUTH_USERS) & filters.private &
     filters.incoming & filters.command("start", prefixes=prefixes)
-)
-async def Start_msg(bot: GreyMatter , m: Message):
-    await bot.send_photo(
-    m.chat.id,
-    photo="https://telegra.ph/file/19eeb26fa2ce58765917a.jpg",
-    caption = f"Hello [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n" +
-    f"\nI am Forward bot." +
-    f"\nPress /help for More Info.\n\n__**Owner** : @GreyMatter_Owner\n**Language** : Python\n**Framwork** : Pyrogram__",
-    # parse_mode="md",
-    reply_markup=InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton("Owner", url="https://t.me/GreyMatter_Owner")],
-            [InlineKeyboardButton("Channel", url="https://t.me/GreyMatter_Bots")],
-            [InlineKeyboardButton("YT Channel", url="https://youtube.com/@greymattersyt")],
-        ],
-    )
-    )
-
-
-@GreyMatter.on_message(
-    filters.chat(AUTH_USERS) & filters.private &
-    filters.incoming & filters.command("help", prefixes=prefixes)
-)
-async def help_msg(bot: GreyMatter , m: Message):   
-    await bot.send_message(
-        m.chat.id,
-        f"**(c) @GreyMatter_Bots**" +
-        f"\n\nI can Forward message from one chat to another\n"+
-        f"Available Commands are :"+
-        f"\n\n/greymatter to start forwarding\n/log - To get Log file\n/restart - To Restart the bot"
-    )
-
-@GreyMatter.on_message(
-    filters.chat(AUTH_USERS) & filters.private &
-    filters.incoming & filters.command("restart", prefixes=prefixes)
-)
-async def restart_handler(_, m):
-    await m.reply_text("Restarted!", True)
-    os.execl(sys.executable, sys.executable, *sys.argv)
-
-@GreyMatter.on_message(
-    filters.chat(AUTH_USERS) & filters.private &
-    filters.incoming & filters.command("log", prefixes=prefixes)
-)
-async def log_msg(bot: GreyMatter , m: Message):   
-    await bot.send_document(m.chat.id, "log.txt")
+)async def forward(bot: don , m: Message):
+    msg = await bot.ask(m.from_user.id, "**Forward any message from the Target channel\nBot should be admin at both the Channels**")
+    t_chat = msg.forward_from_chat.id
+    msg1 = await bot.ask(m.chat.id, "**Send Starting Message From Where you want to Start forwarding**")
+    msg2 = await bot.ask(m.chat.id, "**Send Ending Message from same chat**")
+   # print(msg1.forward_from_message_id, msg1.forward_from_chat.id, msg1.forward_from_message.id)
+    i_chat = msg1.forward_from_chat.id
+    s_msg = int(msg1.forward_from_message.id)
+    f_msg = int(msg2.forward_from_message.id)+1
+    await m.reply_text('**Forwarding Started**\n\nPress /restart to Stop and /log to get log TXT file')
+    try:
+        for i in range(s_msg, f_msg):
+            try:
+                await bot.copy_message(
+                    chat_id==t_chat,
+                    from_chat_id==i_chat,
+                    message_id==i 
+                )
+                #time.sleep(2) #original Slow 
+                #time.sleep(1) #original edited for Fast
+                asyncio.sleep(1) #Best & Fast                                             #asyncio.sleep(1)
+                #asyncio.sleep(0) #may Error & Fast
+                # dimaag lagaya kar tab samjh me aayega 😁
+            except Exception:
+                continue
+    except Exception as e:
+        await m.reply_text(str(e))
+    await m.reply_text("Done Forwarding")
+# Kuch log bol rahe the credit mat dal to chod diye
