@@ -11,7 +11,7 @@ import os
 @don.on_message(filters.private & filters.command("shivam"))
 async def forward(bot: don , m: Message):
     msg = await bot.send_message(m.from_user.id, "**Forward any message from the Target channel\nBot should be admin at both the Channels**")
-    t_chat = msg.forward_from_chat.id
+    t_chat = msg.forward_from_chat_id
     msg1 = await bot.send_message(m.chat.id, "**Send Starting Message From Where you want to Start forwarding**")
     msg2 = await bot.send_message(m.chat.id, "**Send Ending Message from same chat**")
    # print(msg1.forward_from_message_id, msg1.forward_from_chat.id, msg1.forward_from_message.id)
